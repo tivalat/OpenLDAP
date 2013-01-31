@@ -13,19 +13,21 @@ baseDN = "ou=Users,domainName=ming.vn,o=domains,dc=ming,dc=vn"
 #IP = "192.168.25.108"
 MIN = 1
 MAX = 2000000
-MAIL_NUMBER = 1 
 
 # Read parameter
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--ip", help="LDAP Server's IP")
+parser.add_argument("--mailnumber", help="Mail quantity")
 args = parser.parse_args()
 if args.ip:
     IP = args.ip
 else:
     IP = "192.168.25.108"
-
-print IP
+if args.mailnumber:
+    MAIL_NUMBER = args.mailnumber
+else:
+    MAIL_NUMBER = 2
 
 def test(mail_no):
     
@@ -73,13 +75,13 @@ def test(mail_no):
         print e
         # handle error however you like
     
-######################################################
+########################################################################
 # Test case 1: search MAIL_NUMBER mails randomly
-######################################################
+########################################################################
 def tc1():
-    print "######################################################"
-    print "# Test case 1: search MAIL_NUMBER mails randomly"
-    print "######################################################"
+    print "################################################################################" 
+    print "# Test case 1: search %s mail(s) randomly" % (MAIL_NUMBER)
+    print "################################################################################" 
     
     begin = datetime.datetime.now()
     
@@ -96,9 +98,9 @@ def tc1():
 ########################################################################
 
 def tc2():
-    print "########################################################################"    
-    print "# Test case 2: search MAIL_NUMBER non-existent mails randomly"    
-    print "########################################################################"
+    print "################################################################################"    
+    print "# Test case 2: search %s non-existent mail(s) randomly"  % (MAIL_NUMBER)    
+    print "################################################################################"
     
     begin = datetime.datetime.now()
     
