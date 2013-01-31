@@ -20,9 +20,11 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--ip", help="LDAP Server's IP")
 args = parser.parse_args()
-if not args.ip:
+if args.ip:
+    IP = args.ip
+else:
     IP = "192.168.25.108"
-    
+
 print IP
 
 def test(mail_no):
@@ -36,14 +38,14 @@ def test(mail_no):
         # you should  set the next option to ldap.VERSION2 if you're using a v2 directory
         l.protocol_version = ldap.VERSION3    
     
-        # DEBUG
-        print mail_no
+        # DEBUG        
         begin = datetime.datetime.now()
         
         searchScope = ldap.SCOPE_ONELEVEL
         ## retrieve all attributes - again adjust to your needs - see documentation for more options
         retrieveAttributes = ["mail"]
-        mail = "viet%s@ming.vn" % (mail_no) 
+        mail = "viet%s@ming.vn" % (mail_no)
+        print "Searching %s" % (mail)
         searchFilter = "mail=%s" % (mail)
         
         try:
@@ -65,7 +67,7 @@ def test(mail_no):
     
         # DEBUG
         end = datetime.datetime.now()
-        report(begin, end, 1)
+        print "Search time is: %s" % (end - begin)
     
     except ldap.LDAPError, e:
         print e
@@ -75,6 +77,10 @@ def test(mail_no):
 # Test case 1: search MAIL_NUMBER mails randomly
 ######################################################
 def tc1():
+    print "######################################################"
+    print "# Test case 1: search MAIL_NUMBER mails randomly"
+    print "######################################################"
+    
     begin = datetime.datetime.now()
     
     for i in range(0, MAIL_NUMBER):
@@ -90,6 +96,10 @@ def tc1():
 ########################################################################
 
 def tc2():
+    print "########################################################################"    
+    print "# Test case 2: search MAIL_NUMBER non-existent mails randomly"    
+    print "########################################################################"
+    
     begin = datetime.datetime.now()
     
     for i in range(0, MAIL_NUMBER):
