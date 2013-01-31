@@ -10,11 +10,10 @@ from random import randint
 
 ## The next lines will also need to be changed to support your search requirements and directory
 baseDN = "ou=Users,domainName=ming.vn,o=domains,dc=ming,dc=vn"
-#IP = "192.168.25.108"
 MIN = 1
 MAX = 2000000
 
-# Read parameter
+# Read parameters
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--ip", help="LDAP Server's IP")
@@ -25,7 +24,7 @@ if args.ip:
 else:
     IP = "192.168.25.108"
 if args.mailnumber:
-    MAIL_NUMBER = args.mailnumber
+    MAIL_NUMBER = int(args.mailnumber)
 else:
     MAIL_NUMBER = 2
 
@@ -45,9 +44,9 @@ def test(mail_no):
         
         searchScope = ldap.SCOPE_ONELEVEL
         ## retrieve all attributes - again adjust to your needs - see documentation for more options
-        retrieveAttributes = ["mail"]
+        retrieveAttributes = None
         mail = "viet%s@ming.vn" % (mail_no)
-        print "Searching %s" % (mail)
+        print "Searching %s.." % (mail)
         searchFilter = "mail=%s" % (mail)
         
         try:
