@@ -60,39 +60,40 @@ def test(mail_no):
         searchFilter = "mail=%s" % (mail)
         
         # async search
-#        try:
-#            ldap_result_id = l.search(baseDN, searchScope, searchFilter, retrieveAttributes)
-#            result_set = []
-#            while 1:
-#                result_type, result_data = l.result(ldap_result_id, 0)
-#                if (result_data == []):
-#                    break
-#                else:
-#                    ## here you don't have to append to a list
-#                    ## you could do whatever you want with the individual entry
-#                    ## The appending to list is just for illustration. 
-#                    if result_type == ldap.RES_SEARCH_ENTRY:
-#                        result_set.append(result_data)
-#            if DEBUG:
-#                print result_set
-#        except ldap.LDAPError, e:
-#            print e    
-
-        # sync search        
         try:
-            ldap_result = l.search_s(baseDN, searchScope, searchFilter, retrieveAttributes)
-            print ldap_result
+            ldap_result_id = l.search(baseDN, searchScope, searchFilter, retrieveAttributes)
+            result_set = []
+            while 1:
+                result_type, result_data = l.result(ldap_result_id, 0)
+                if (result_data == []):
+                    break
+                else:
+                    ## here you don't have to append to a list
+                    ## you could do whatever you want with the individual entry
+                    ## The appending to list is just for illustration. 
+                    if result_type == ldap.RES_SEARCH_ENTRY:
+                        result_set.append(result_data)
+            if DEBUG:
+                print result_set
         except ldap.LDAPError, e:
-            print e
-    
-        end = datetime.datetime.now()
-        
-        if DEBUG:
-            print "Search time is: %s" % (end - begin)
-    
-    except ldap.LDAPError, e:
-        print e
-        # handle error however you like
+            print e    
+
+#        # sync search        
+#        try:
+#            ldap_result = l.search_s(baseDN, searchScope, searchFilter, retrieveAttributes)
+#            if DEBUG:                
+#                print ldap_result
+#        except ldap.LDAPError, e:
+#            print e
+#    
+#        end = datetime.datetime.now()
+#        
+#        if DEBUG:
+#            print "Search time is: %s" % (end - begin)
+#    
+#    except ldap.LDAPError, e:
+#        print e
+#        # handle error however you like
     
 ########################################################################
 # Test case 1: search MAIL_NUMBER mails randomly
