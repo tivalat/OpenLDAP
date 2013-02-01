@@ -18,15 +18,20 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--ip", help="LDAP Server's IP")
 parser.add_argument("--mailnumber", help="Mail quantity")
+parser.add_argument("--debug", help="true or false")
 args = parser.parse_args()
 if args.ip:
     IP = args.ip
 else:
-    IP = "192.168.25.108"
+    IP = "localhost"
 if args.mailnumber:
     MAIL_NUMBER = int(args.mailnumber)
 else:
     MAIL_NUMBER = 2
+if args.debug == True:
+    DEBUG = True
+else:    
+    DEBUG = False
 
 def test(mail_no):
     
@@ -46,7 +51,10 @@ def test(mail_no):
         ## retrieve all attributes - again adjust to your needs - see documentation for more options
         retrieveAttributes = None
         mail = "viet%s@ming.vn" % (mail_no)
-        print "Searching %s.." % (mail)
+        
+        if DEBUG:
+            print "Searching %s.." % (mail)
+            
         searchFilter = "mail=%s" % (mail)
         
         try:
@@ -68,7 +76,9 @@ def test(mail_no):
     
         # DEBUG
         end = datetime.datetime.now()
-        print "Search time is: %s" % (end - begin)
+        
+        if DEBUG:
+            print "Search time is: %s" % (end - begin)
     
     except ldap.LDAPError, e:
         print e
@@ -115,7 +125,6 @@ def report(begin, end, query_number):
     
     time = (end-begin)/query_number
     print "Average search time is: %s" %(time)
-
 
 def main():
     tc1()
