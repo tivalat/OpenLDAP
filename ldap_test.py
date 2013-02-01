@@ -105,7 +105,6 @@ def tc1():
     print "################################################################################" 
     
     begin = datetime.datetime.now()
-    print MAIL_NUMBER
     for i in range(0, MAIL_NUMBER):
         mail_no = randint(MIN, MAX)
         test(mail_no)    
@@ -124,7 +123,6 @@ def tc2():
     print "################################################################################"
     
     begin = datetime.datetime.now()
-    print MAIL_NUMBER
     for i in range(0, MAIL_NUMBER):
         mail_no = randint(MAX, MAX * 2)
         test(mail_no)    
@@ -136,7 +134,7 @@ def tc2():
 def report(begin, end, query_number):
     
     time = (end-begin)/query_number
-    log = "Searched %sentries. Average search time is: %s" %(query_number, time)
+    log = "Searched %s entries. Average search time is: %s" %(query_number, time)
     global LOG
     LOG = LOG + log + "\n"
 
