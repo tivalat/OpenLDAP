@@ -11,14 +11,14 @@ from random import randint
 ## The next lines will also need to be changed to support your search requirements and directory
 baseDN = "ou=Users,domainName=ming.vn,o=domains,dc=ming,dc=vn"
 MIN = 1
-MAX = 2000000
+MAX = 2000000 
 
 # Read parameters
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--ip", help="LDAP Server's IP")
 parser.add_argument("--mailnumber", help="Mail quantity")
-parser.add_argument("--debug", help="1 or 0")
+parser.add_argument("--debug", help="0 or 1")
 args = parser.parse_args()
 
 # Default values
@@ -59,23 +59,31 @@ def test(mail_no):
             
         searchFilter = "mail=%s" % (mail)
         
+        # async search
+#        try:
+#            ldap_result_id = l.search(baseDN, searchScope, searchFilter, retrieveAttributes)
+#            result_set = []
+#            while 1:
+#                result_type, result_data = l.result(ldap_result_id, 0)
+#                if (result_data == []):
+#                    break
+#                else:
+#                    ## here you don't have to append to a list
+#                    ## you could do whatever you want with the individual entry
+#                    ## The appending to list is just for illustration. 
+#                    if result_type == ldap.RES_SEARCH_ENTRY:
+#                        result_set.append(result_data)
+#            if DEBUG:
+#                print result_set
+#        except ldap.LDAPError, e:
+#            print e    
+
+        # sync search        
         try:
-            ldap_result_id = l.search(baseDN, searchScope, searchFilter, retrieveAttributes)
-            result_set = []
-            while 1:
-                result_type, result_data = l.result(ldap_result_id, 0)
-                if (result_data == []):
-                    break
-                else:
-                    ## here you don't have to append to a list
-                    ## you could do whatever you want with the individual entry
-                    ## The appending to list is just for illustration. 
-                    if result_type == ldap.RES_SEARCH_ENTRY:
-                        result_set.append(result_data)
-            if DEBUG:
-                print result_set
+            ldap_result = l.search_s(baseDN, searchScope, searchFilter, retrieveAttributes)
+            print ldap_result
         except ldap.LDAPError, e:
-            print e    
+            print e
     
         end = datetime.datetime.now()
         
