@@ -90,10 +90,10 @@ def test(mail_no):
 #        
 #        if DEBUG:
 #            print "Search time is: %s" % (end - begin)
-#    
-#    except ldap.LDAPError, e:
-#        print e
-#        # handle error however you like
+    
+    except ldap.LDAPError, e:
+        print e
+        # handle error however you like
     
 ########################################################################
 # Test case 1: search MAIL_NUMBER mails randomly
