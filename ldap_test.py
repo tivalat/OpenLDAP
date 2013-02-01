@@ -136,7 +136,7 @@ def tc2():
 def report(begin, end, query_number):
     
     time = (end-begin)/query_number
-    log = "Average search time is: %s" %(time)
+    log = "Searched %sentries. Average search time is: %s" %(query_number, time)
     global LOG
     LOG = LOG + log + "\n"
 
