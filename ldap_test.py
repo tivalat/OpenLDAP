@@ -18,8 +18,10 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--ip", help="LDAP Server's IP")
 parser.add_argument("--mailnumber", help="Mail quantity")
-parser.add_argument("--debug", help="true or false")
+parser.add_argument("--debug", help="1 or 0")
 args = parser.parse_args()
+
+# Default values
 if args.ip:
     IP = args.ip
 else:
@@ -28,8 +30,8 @@ if args.mailnumber:
     MAIL_NUMBER = int(args.mailnumber)
 else:
     MAIL_NUMBER = 2
-if args.debug == True:
-    DEBUG = True
+if args.debug:
+    DEBUG = bool(int(args.debug))
 else:    
     DEBUG = False
 
@@ -70,11 +72,11 @@ def test(mail_no):
                     ## The appending to list is just for illustration. 
                     if result_type == ldap.RES_SEARCH_ENTRY:
                         result_set.append(result_data)
-            print result_set
+            if DEBUG:
+                print result_set
         except ldap.LDAPError, e:
             print e    
     
-        # DEBUG
         end = datetime.datetime.now()
         
         if DEBUG:
