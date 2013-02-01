@@ -8,10 +8,11 @@ import ldap
 import datetime
 from random import randint
 
-## The next lines will also need to be changed to support your search requirements and directory
+# Constants
 baseDN = "ou=Users,domainName=ming.vn,o=domains,dc=ming,dc=vn"
 MIN = 1
-MAX = 2000000 
+MAX = 2000000
+LOG = '' 
 
 # Read parameters
 import argparse
@@ -104,7 +105,7 @@ def tc1():
     print "################################################################################" 
     
     begin = datetime.datetime.now()
-    
+    print MAIL_NUMBER
     for i in range(0, MAIL_NUMBER):
         mail_no = randint(MIN, MAX)
         test(mail_no)    
@@ -123,7 +124,7 @@ def tc2():
     print "################################################################################"
     
     begin = datetime.datetime.now()
-    
+    print MAIL_NUMBER
     for i in range(0, MAIL_NUMBER):
         mail_no = randint(MAX, MAX * 2)
         test(mail_no)    
@@ -135,11 +136,14 @@ def tc2():
 def report(begin, end, query_number):
     
     time = (end-begin)/query_number
-    print "Average search time is: %s" %(time)
+    log = "Average search time is: %s" %(time)
+    global LOG
+    LOG = LOG + log + "\n"
 
 def main():
     tc1()
     tc2()
+    print LOG
 
 if __name__ == '__main__':
     main()
