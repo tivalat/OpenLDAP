@@ -35,7 +35,7 @@ else:
 if args.debug:
     DEBUG = bool(int(args.debug))
 else:    
-    DEBUG = True
+    DEBUG = False
 
 ########################################################################
 # Test case 1: search MAIL_NUMBER mails randomly
@@ -63,7 +63,7 @@ def tc1(ldap_conn, does_mail_exist):
             mail = "viet%s@ming.vn" % (mail_no)
         
             if DEBUG:
-                print "Searching %s.." % (mail)
+                print "Searching %s..." % (mail)
                 
             searchFilter = "mail=%s" % (mail)
             ldap_result.put(ldap_conn.search(baseDN, searchScope, searchFilter, retrieveAttributes))
@@ -84,7 +84,8 @@ def tc1(ldap_conn, does_mail_exist):
                         result_set.append(result_data)
                 
                 # DEBUG
-                print "Result: %s" % (result_set)
+                if DEBUG:
+                    print "Result: %s" % (result_set)
                 
     except ldap.LDAPError, e:
         print e     
