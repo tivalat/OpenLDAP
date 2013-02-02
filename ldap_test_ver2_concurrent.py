@@ -41,7 +41,7 @@ else:
 # Test case 1: search MAIL_NUMBER mails randomly
 ########################################################################
 import Queue
-def tc1(ldap_conn, does_mail_exist):
+def tc1(does_mail_exist):
     print "################################################################################" 
     print "# Test case 1: search %s mail(s) randomly" % (MAIL_NUMBER)
     print "################################################################################" 
@@ -52,22 +52,34 @@ def tc1(ldap_conn, does_mail_exist):
     # async search
     try:
         for i in range(0, MAIL_NUMBER):
-            if does_mail_exist:
-                mail_no = randint(MIN, MAX)
-            else:
-                mail_no = randint(MAX, MAX*2)
-        
-            searchScope = ldap.SCOPE_ONELEVEL
-            ## retrieve all attributes - again adjust to your needs - see documentation for more options
-            retrieveAttributes = None
-            mail = "viet%s@ming.vn" % (mail_no)
-        
-            if DEBUG:
-                print "Searching %s..." % (mail)
-                
-            searchFilter = "mail=%s" % (mail)
-            ldap_result.put(ldap_conn.search(baseDN, searchScope, searchFilter, retrieveAttributes))
+            # first you must open a connection to the server
+            try:
+                ldap_conn = ldap.open(IP)
+                ## searching doesn't require a bind in LDAP V3.  If you're using LDAP v2, set the next line appropriately
+                ## and do a bind as shown in the above example.
+                # you can also set this to ldap.VERSION2 if you're using a v2 directory
+                # you should  set the next option to ldap.VERSION2 if you're using a v2 directory
+                ldap.protocol_version = ldap.VERSION3  
             
+                if does_mail_exist:
+                    mail_no = randint(MIN, MAX)
+                else:
+                    mail_no = randint(MAX, MAX*2)
+            
+                searchScope = ldap.SCOPE_ONELEVEL
+                ## retrieve all attributes - again adjust to your needs - see documentation for more options
+                retrieveAttributes = None
+                mail = "viet%s@ming.vn" % (mail_no)
+            
+                if DEBUG:
+                    print "Searching %s..." % (mail)
+                    
+                searchFilter = "mail=%s" % (mail)
+                ldap_result.put(ldap_conn.search(baseDN, searchScope, searchFilter, retrieveAttributes))
+            
+            except ldap.LDAPError, e:
+                print e
+                
         while not ldap_result.empty():
             result_set = []
             ldap_result_id = ldap_result.get()
@@ -83,9 +95,9 @@ def tc1(ldap_conn, does_mail_exist):
                     if result_type == ldap.RES_SEARCH_ENTRY:
                         result_set.append(result_data)
                 
-            # DEBUG
-            if DEBUG:
-                print "Result: %s" % (result_set)
+                # DEBUG
+                if DEBUG:
+                    print "Result: %s" % (result_set)
                 
     except ldap.LDAPError, e:
         print e     
@@ -102,21 +114,9 @@ def report(begin, end, query_number):
     LOG += log + "\n"
 
 def main():
-    
-    # first you must open a connection to the server
-    try:
-        ldap_conn = ldap.open(IP)
-        ## searching doesn't require a bind in LDAP V3.  If you're using LDAP v2, set the next line appropriately
-        ## and do a bind as shown in the above example.
-        # you can also set this to ldap.VERSION2 if you're using a v2 directory
-        # you should  set the next option to ldap.VERSION2 if you're using a v2 directory
-        ldap.protocol_version = ldap.VERSION3  
-        tc1(ldap_conn, 1)
-        tc1(ldap_conn, 0)
+        tc1(1)
+        tc1(0)
         print LOG
-    except ldap.LDAPError, e:
-        print e
-        # handle error however you like
 
 if __name__ == '__main__':
     main()
