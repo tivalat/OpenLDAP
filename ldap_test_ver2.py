@@ -41,7 +41,7 @@ else:
 # Test case 1: search MAIL_NUMBER mails randomly
 ########################################################################
 import Queue
-def tc1(ldap_conn):
+def tc1(ldap_conn, does_mail_exist):
     print "################################################################################" 
     print "# Test case 1: search %s mail(s) randomly" % (MAIL_NUMBER)
     print "################################################################################" 
@@ -52,7 +52,10 @@ def tc1(ldap_conn):
     # async search
     try:
         for i in range(0, MAIL_NUMBER):
-            mail_no = randint(MIN, MAX)
+            if does_mail_exist:
+                mail_no = randint(MIN, MAX)
+            else:
+                mail_no = randint(MAX, MAX*2)
         
             searchScope = ldap.SCOPE_ONELEVEL
             ## retrieve all attributes - again adjust to your needs - see documentation for more options
@@ -107,7 +110,8 @@ def main():
         # you can also set this to ldap.VERSION2 if you're using a v2 directory
         # you should  set the next option to ldap.VERSION2 if you're using a v2 directory
         ldap.protocol_version = ldap.VERSION3  
-        tc1(ldap_conn)
+        tc1(ldap_conn, 1)
+        tc1(ldap_conn, 0)
         print LOG
     except ldap.LDAPError, e:
         print e
