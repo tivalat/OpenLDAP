@@ -10,7 +10,12 @@ Created on Oct 12, 2012
 
 def main():
     s = range(5,10)
-    print s
+    print bool('0')
+    import datetime
+    time = datetime.datetime.now()
+    print time
+    print time.second
+    print time.microsecond
         
 if __name__ == '__main__':
     main()

@@ -13,6 +13,7 @@ baseDN = "ou=Users,domainName=ming.vn,o=domains,dc=ming,dc=vn"
 MIN = 1
 MAX = 2000000
 LOG = '' 
+TC = 1
 
 # Read parameters
 import argparse
@@ -120,11 +121,12 @@ def tc2(ldap_conn):
     report(begin, end, MAIL_NUMBER)
     
 def report(begin, end, query_number):
+    global TC, LOG
     
     time = (end-begin)/query_number
-    log = "Searched %s entries. Average search time is: %s" %(query_number, time)
-    global LOG
-    LOG = LOG + log + "\n"
+    log = "Test case %s: Searched %s entries. Average search time is: %s" %(TC, query_number, time)
+    TC += 1
+    LOG += log + "\n"
 
 def main():
     
