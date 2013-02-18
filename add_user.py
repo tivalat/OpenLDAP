@@ -49,10 +49,16 @@ try:
     dn = "dc=ming,dc=vn"
     
     attrs = {}
-    attrs['objectClass'] = {'dcObject', 'organization'}
+    attrs['objectClass'] = ['dcObject', 'organization']
     attrs['dc'] = 'ming'
     attrs['o'] = 'Example Corporation'
     attrs['description'] = 'The Example Corporation'
+    
+    # Convert our dict to nice syntax for the add-function using modlist-module
+    ldif = modlist.addModlist(attrs)
+        
+    # Do the actual synchronous add-operation to the ldapserver
+    l.add_s(dn,ldif)
 except Exception, e:
     print e
     
@@ -63,6 +69,12 @@ try:
     attrs['objectClass'] = 'organizationalRole'
     attrs['cn'] = 'admin'
     attrs['description'] = 'Directory Manager'
+    
+    # Convert our dict to nice syntax for the add-function using modlist-module
+    ldif = modlist.addModlist(attrs)
+        
+    # Do the actual synchronous add-operation to the ldapserver
+    l.add_s(dn,ldif)
 except Exception, e:
     print e
     
@@ -73,6 +85,12 @@ try:
     attrs['objectClass'] = 'organizationalRole'
     attrs['cn'] = 'admin'
     attrs['description'] = 'Directory Manager'
+    
+    # Convert our dict to nice syntax for the add-function using modlist-module
+    ldif = modlist.addModlist(attrs)
+        
+    # Do the actual synchronous add-operation to the ldapserver
+    l.add_s(dn,ldif)
 except Exception, e:
     print e
     
@@ -80,9 +98,15 @@ try:
     dn = "o=domains,dc=ming,dc=vn"
     
     attrs = {}
-    attrs['objectClass'] = {'top', 'organization'}
+    attrs['objectClass'] = ['top', 'organization']
     attrs['o'] = 'domains'
     attrs['l'] = 'o=domains,dc=ming,dc=vn'
+    
+    # Convert our dict to nice syntax for the add-function using modlist-module
+    ldif = modlist.addModlist(attrs)
+        
+    # Do the actual synchronous add-operation to the ldapserver
+    l.add_s(dn,ldif)
 except Exception, e:
     print e
     
@@ -90,8 +114,14 @@ try:
     dn = "domainName=ming.vn,o=domains,dc=ming,dc=vn"
     
     attrs = {}
-    attrs['objectClass'] = {'top', 'mailDomain'}
+    attrs['objectClass'] = ['top', 'mailDomain']
     attrs['domainName'] = 'ming.vn'
+    
+    # Convert our dict to nice syntax for the add-function using modlist-module
+    ldif = modlist.addModlist(attrs)
+        
+    # Do the actual synchronous add-operation to the ldapserver
+    l.add_s(dn,ldif)
 except Exception, e:
     print e
     
@@ -99,8 +129,14 @@ try:
     dn = "domainName=ming.vn,o=domains,dc=ming,dc=vn"
     
     attrs = {}
-    attrs['objectClass'] = {'top', 'mailDomain'}
+    attrs['objectClass'] = ['top', 'mailDomain']
     attrs['domainName'] = 'ming.vn'
+    
+    # Convert our dict to nice syntax for the add-function using modlist-module
+    ldif = modlist.addModlist(attrs)
+        
+    # Do the actual synchronous add-operation to the ldapserver
+    l.add_s(dn,ldif)
 except Exception, e:
     print e
 
@@ -108,8 +144,14 @@ try:
     dn = "ou=Users,domainName=ming.vn,o=domains,dc=ming,dc=vn"
     
     attrs = {}
-    attrs['objectClass'] = {'top', 'organizationalUnit'}
+    attrs['objectClass'] = ['top', 'organizationalUnit']
     attrs['ou'] = 'Users'
+    
+    # Convert our dict to nice syntax for the add-function using modlist-module
+    ldif = modlist.addModlist(attrs)
+        
+    # Do the actual synchronous add-operation to the ldapserver
+    l.add_s(dn,ldif)
 except Exception, e:
     print e
 
@@ -136,7 +178,7 @@ for i in range(MIN, MAX+1):
         print i
     except Exception, e:
         print e
-        
+    
 # Its nice to the server to disconnect and free resources when done
 l.unbind_s()
 
