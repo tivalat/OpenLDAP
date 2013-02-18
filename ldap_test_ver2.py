@@ -43,7 +43,7 @@ else:
 import Queue
 def tc1(ldap_conn, does_mail_exist):
     print "################################################################################" 
-    print "# Test case 1: search %s mail(s) randomly" % (MAIL_NUMBER)
+    print "# Test case: search %s mail(s) randomly" % (MAIL_NUMBER)
     print "################################################################################" 
     
     begin = datetime.datetime.now()

@@ -10,6 +10,25 @@ import ldap.modlist as modlist
 import datetime
 
 IP = "192.168.25.108"
+MIN = 1
+MAX = 2000000
+
+# Read parameters
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("--ip", help="LDAP Server's IP")
+parser.add_argument("--debug", help="0 or 1")
+args = parser.parse_args()
+
+# Default values
+if args.ip:
+    IP = args.ip
+else:
+    IP = "localhost"
+if args.debug:
+    DEBUG = bool(int(args.debug))
+else:    
+    DEBUG = False
 
 begin = datetime.datetime.now()
 
@@ -20,7 +39,7 @@ l = ldap.open(IP)
 l.simple_bind_s("cn=admin,dc=ming,dc=vn","convit")
 
 
-for i in range(1600000, 2000001):
+for i in range(MIN, MAX+1):
     try:
         mail="viet%s@ming.vn" % (i)
         
