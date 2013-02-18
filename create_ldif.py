@@ -1,4 +1,4 @@
-file = open('/home/vietht/Desktop/users.ldif', 'w')
+file = open('users.ldif', 'w')
 
 MAX = 2000000
 
