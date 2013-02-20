@@ -111,7 +111,11 @@ def main():
         # you can also set this to ldap.VERSION2 if you're using a v2 directory
         # you should  set the next option to ldap.VERSION2 if you're using a v2 directory
         ldap.protocol_version = ldap.VERSION3  
+        
+        # Search existing mails
         tc1(ldap_conn, 1)
+        
+        # Search nonexistent mails
         tc1(ldap_conn, 0)
         print LOG
     except ldap.LDAPError, e:

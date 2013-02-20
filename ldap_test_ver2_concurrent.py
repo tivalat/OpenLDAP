@@ -36,6 +36,7 @@ if args.debug:
     DEBUG = bool(int(args.debug))
 else:    
     DEBUG = False
+#    DEBUG = True
 
 ########################################################################
 # Test case 1: search MAIL_NUMBER mails randomly
@@ -47,60 +48,41 @@ def tc1(does_mail_exist):
     print "################################################################################" 
     
     begin = datetime.datetime.now()
-    ldap_result = Queue.Queue()
+    ldap_result = []
         
-    # async search
-    try:
-        for i in range(0, MAIL_NUMBER):
-            # first you must open a connection to the server
-            try:
-                ldap_conn = ldap.open(IP)
-                ## searching doesn't require a bind in LDAP V3.  If you're using LDAP v2, set the next line appropriately
-                ## and do a bind as shown in the above example.
-                # you can also set this to ldap.VERSION2 if you're using a v2 directory
-                # you should  set the next option to ldap.VERSION2 if you're using a v2 directory
-                ldap.protocol_version = ldap.VERSION3  
-            
-                if does_mail_exist:
-                    mail_no = randint(MIN, MAX)
-                else:
-                    mail_no = randint(MAX, MAX*2)
-            
-                searchScope = ldap.SCOPE_ONELEVEL
-                ## retrieve all attributes - again adjust to your needs - see documentation for more options
-                retrieveAttributes = None
-                mail = "viet%s@ming.vn" % (mail_no)
-            
-                if DEBUG:
-                    print "Searching %s..." % (mail)
-                    
-                searchFilter = "mail=%s" % (mail)
-                ldap_result.put(ldap_conn.search(baseDN, searchScope, searchFilter, retrieveAttributes))
-            
-            except ldap.LDAPError, e:
-                print e
+    # sync search
+    for i in range(0, MAIL_NUMBER):
+        # first you must open a connection to the server
+        try:
+            ldap_conn = ldap.open(IP)
+            ## searching doesn't require a bind in LDAP V3.  If you're using LDAP v2, set the next line appropriately
+            ## and do a bind as shown in the above example.
+            # you can also set this to ldap.VERSION2 if you're using a v2 directory
+            # you should  set the next option to ldap.VERSION2 if you're using a v2 directory
+            ldap.protocol_version = ldap.VERSION3  
+        
+            if does_mail_exist:
+                mail_no = randint(MIN, MAX)
+            else:
+                mail_no = randint(MAX, MAX*2)
+        
+            searchScope = ldap.SCOPE_ONELEVEL
+            ## retrieve all attributes - again adjust to your needs - see documentation for more options
+            retrieveAttributes = None
+            mail = "viet%s@ming.vn" % (mail_no)
+        
+            if DEBUG:
+                print "Searching %s..." % (mail)
                 
-        while not ldap_result.empty():
-            result_set = []
-            ldap_result_id = ldap_result.get()
+            searchFilter = "mail=%s" % (mail)
+            ldap_result.append(ldap_conn.search_s(baseDN, searchScope, searchFilter, retrieveAttributes))
+        
+        except ldap.LDAPError, e:
+            print e
             
-            while 1:
-                result_type, result_data = ldap_conn.result(ldap_result_id, 0)
-                if (result_data == []):
-                    break
-                else:
-                    ## here you don't have to append to a list
-                    ## you could do whatever you want with the individual entry
-                    ## The appending to list is just for illustration. 
-                    if result_type == ldap.RES_SEARCH_ENTRY:
-                        result_set.append(result_data)
-                
-                # DEBUG
-                if DEBUG:
-                    print "Result: %s" % (result_set)
-                
-    except ldap.LDAPError, e:
-        print e     
+    # Result
+    if DEBUG:
+        print ldap_result
         
     end = datetime.datetime.now()
     report(begin, end, MAIL_NUMBER)
